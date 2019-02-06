@@ -21,6 +21,6 @@ const controllers = require('./controllers')
 app.use(controllers)
 
 
-db.sequelize.sync({force: false}).then(() => {
+db.sequelize.sync({force: true}).then(() => {
     app.listen(PORT, () => console.log(`app listening on port ${PORT}!`))
 })
