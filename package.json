@@ -19,5 +19,6 @@
   },
   "engines": {
     "node": "10.13.0"
-  }
+  },
+  "homepage": "https://github.com/SalvadorM/hunter_app_api"
 }
