@@ -26,5 +26,5 @@ db.User = require('../models/User')(sequelize, Sequelize)
 
 
 //relations
-module.export = db
+module.exports = db
 

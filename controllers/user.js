@@ -37,4 +37,4 @@ const userController = {
 
 }
 
-module.export = userController.userRouter()
+module.exports = userController.userRouter()

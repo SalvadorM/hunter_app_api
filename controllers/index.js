@@ -4,6 +4,6 @@ const router = express.Router()
 //controller
 const user = require('./user')
 
-app.use('/user', user)
+router.use('/user', user)
 
-module.export = router
+module.exports = router
