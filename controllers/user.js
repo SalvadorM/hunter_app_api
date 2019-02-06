@@ -12,7 +12,7 @@ const userController = {
         const router = express.Router()
 
         router.get('/:id', this.getUserById)
-
+        router.get('/all', this.getAllUsers)
         return router
     },
 
@@ -26,6 +26,13 @@ const userController = {
         .catch(err => {
             res.json(err)
         })
+    },
+    getAllUsers(req, res){
+        User.findAll()
+        .then(users => {
+          res.json(users)
+        })
+        .catch(err => res.send(err))
     },
 
 }
