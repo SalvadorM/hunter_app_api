@@ -72,7 +72,7 @@ const userController = {
     //@route    GET user/all
     //@desc     Get the all the users from database
     getAllUsers(req, res){
-        User.findAll()
+        User.findAll({ attributes: { exclude: ['password','updatedAt']}})
             .then(users => {
                 res.json(users)
             })
