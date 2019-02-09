@@ -1,8 +1,10 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+const sessions = require('express-session')
 const cors = require('cors')
 const pg = require('pg')
 const db = require('./config/database')
+
 
 //heroku setting
 const PORT = process.env.PORT || 8000
