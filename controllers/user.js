@@ -18,6 +18,7 @@ const userController = {
         router.post('/create', this.createUser)
         router.put('/update/:id', this.updateUser)
         router.delete('/:id', this.deleteUser)
+        
         return router
     },
 
@@ -87,11 +88,17 @@ const userController = {
         const password = req.body.password
         const name = req.body.name
 
-        User.create({ username, email, password, name})
-            .then(user => {
-                res.json(user)
-            })
-            .catch(err => res.status(400).send(err))
+
+        bcrypt.hash(password, null, null, (err, hashedPassword) => {
+            if(err) res.status(400).send(err)
+
+            User.create({ username, email, password: hashedPassword, name})
+                .then(user => {
+                    res.json(user)
+                })
+                .catch(err => res.status(400).send(err))
+
+        })
     },
 
     //@route    DELETE user/:id
