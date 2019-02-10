@@ -23,8 +23,11 @@ db.sequelize = sequelize
 
 //models 
 db.User = require('../models/User')(sequelize, Sequelize)
+db.Class = require('../models/Class')(sequelize, Sequelize)
 
 
 //relations
+
+
 module.exports = db
 
