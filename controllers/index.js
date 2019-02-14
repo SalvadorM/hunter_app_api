@@ -3,11 +3,10 @@ const router = express.Router()
 
 //controllers
 const user = require('./user')
-const Class = require('./course')
-
+const Course = require('./course')
 
 //routes
 router.use('/user', user)
-router.use('/class', Class)
+router.use('/class', Course)
 
 module.exports = router
