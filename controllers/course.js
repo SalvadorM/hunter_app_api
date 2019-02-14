@@ -2,7 +2,7 @@ const express = require('express')
 const db = require('../config/database')
 
 //class model 
-const Class = db.Class
+const Course = db.Course
 
 
 const classController = {
@@ -35,7 +35,7 @@ const classController = {
         const section = req.body.section 
         const information = req.body.information 
 
-        Class.create({classCode, className, section, information})
+        Course.create({classCode, className, section, information})
             .then(addedClass => {
                 res.json(addedClass)
             })

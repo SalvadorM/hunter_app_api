@@ -3,7 +3,7 @@ const router = express.Router()
 
 //controllers
 const user = require('./user')
-const Class = require('./class')
+const Class = require('./course')
 
 
 //routes

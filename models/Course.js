@@ -1,6 +1,6 @@
 
 module.exports = (sequelize, DataTypes) => {
-    const Class = sequelize.define('class', {
+    const Course = sequelize.define('course', {
         classCode: {
             type: DataTypes.INTEGER(10),
             allowNull: false,
@@ -25,5 +25,5 @@ module.exports = (sequelize, DataTypes) => {
         },
     })
 
-    return Class
+    return Course
 }
