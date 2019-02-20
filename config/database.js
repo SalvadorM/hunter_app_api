@@ -28,8 +28,8 @@ db.Semester = require('../models/Semester')(sequelize, Sequelize)
 
 
 //relations
-db.Course.belongsToMany(db.User, {through: 'userCourse'})
-db.User.belongsToMany(db.Course, {through: 'userCourse'})
+db.Course.belongsTo(db.User)
+db.User.hasMany(db.Course)
 
 db.Course.belongsTo(db.Semester)
 db.Semester.hasMany(db.Course)
