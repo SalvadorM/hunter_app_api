@@ -1,8 +1,8 @@
 module.exports = env = {
-    database: "d6nl8o9f2ul5pf",
-    username: "tndtwhqkwvsfxn",
-    password: "e979ee37ecc8fe4c35687d535c4599f8d5cd36ad21e4f35d0fd32e9053cc6649",
-    host: "ec2-107-20-183-142.compute-1.amazonaws.com",
+    database: "d45qjkhehu9mr7",
+    username: "qwsunfxswtiklz",
+    password: "19f47caba3f38feac7f9e7e65ae696cb02d7083d79059773fd5dd2c86561891d",
+    host: "ec2-23-21-130-182.compute-1.amazonaws.com",
     port: "5432",
     dialect: "postgres",
     pool: {
