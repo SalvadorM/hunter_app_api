@@ -24,7 +24,7 @@ db.sequelize = sequelize
 //models 
 db.User = require('../models/User')(sequelize, Sequelize)
 db.Course = require('../models/Course')(sequelize, Sequelize)
-db.userCourse = require('../models/')(sequelize, Sequelize)
+db.userCourse = require('../models/userCourse')(sequelize, Sequelize)
 
 
 //relations
