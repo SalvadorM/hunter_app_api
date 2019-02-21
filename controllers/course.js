@@ -4,6 +4,8 @@ const db = require('../config/database')
 //class model 
 const Course = db.Course
 const User = db.User
+const userCourse = db.userCourse
+
 
 
 const courseController = {
@@ -13,9 +15,9 @@ const courseController = {
         //routes for class model 
         router.get('/find/:id', this.getCourseById)
         router.post('/add', this.addCourse)
+        router.delete('/delete/:id', this.deleteCourse)
         return router
     },
-
     //@route    GET /find/:id
     //@params   id
     //@desc     Get class information by id from database
@@ -39,12 +41,34 @@ const courseController = {
         const userId = req.body.userId
         const semesterId = req.body.semester
 
+        //userCourse 
+        const season = req.body.season
+        const year = req.body.year
+
         Course.create({classCode, className, section, information, userId, semesterId})
             .then(addedClass => {
-                res.json(addedClass)
+                userCourse.create({year, season, userId, courseId: addedClass.id})
+                    .then(data => {
+                        res.json(data)
+                    })
+                    .catch(err => res.status(400).send(err))
             })
             .catch(err => res.status(400).send(err))
-    }
+    },
+
+    //@route    DELETE /delete/:id
+    //@params   id
+    //@desc     delete a course record from database
+    deleteCourse(req, res){
+        const courseId = req.params.id
+        Course.destroy({where: {id: courseId}})
+            .then(()=> {
+                res.json({
+                    message: `Course ${courseId} has been deleted`
+                })
+            })
+            .catch(err => res.status(400).send(err))
+    },
 }
 
 module.exports = courseController.courseRouter()

@@ -1,7 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
     const userCourse = sequelize.define('user_course', {
         year: {
-            type: DataTypes.INTEGER(4),
+            type: DataTypes.INTEGER(),
             allowNull: false,
             validate: {
                 notEmpty: true,

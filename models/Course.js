@@ -2,7 +2,7 @@
 module.exports = (sequelize, DataTypes) => {
     const Course = sequelize.define('course', {
         classCode: {
-            type: DataTypes.INTEGER(10),
+            type: DataTypes.INTEGER(),
             allowNull: false,
             validate: {
                 notEmpty: true,
