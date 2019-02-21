@@ -24,15 +24,12 @@ db.sequelize = sequelize
 //models 
 db.User = require('../models/User')(sequelize, Sequelize)
 db.Course = require('../models/Course')(sequelize, Sequelize)
-db.Semester = require('../models/Semester')(sequelize, Sequelize)
+db.userCourse = require('../models/')(sequelize, Sequelize)
 
 
 //relations
-db.Course.belongsTo(db.User)
-db.User.hasMany(db.Course)
-
-db.Course.belongsTo(db.Semester)
-db.Semester.hasMany(db.Course)
+db.User.belongsToMany(db.Course, { through: userCourse})
+db.User.belongsToMany(db.Course, { through: userCourse})
 
 
 module.exports = db

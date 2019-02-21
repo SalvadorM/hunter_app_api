@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const Semester = sequelize.define('semester', {
+    const userCourse = sequelize.define('user_course', {
         year: {
             type: DataTypes.INTEGER(4),
             allowNull: false,
@@ -16,5 +16,5 @@ module.exports = (sequelize, DataTypes) => {
         },
     })
 
-    return Semester
+    return userCourse
 }
