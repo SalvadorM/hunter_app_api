@@ -28,8 +28,8 @@ db.userCourse = require('../models/userCourse')(sequelize, Sequelize)
 
 
 //relations
-db.User.belongsToMany(db.Course, { through: db.userCourse})
-db.User.belongsToMany(db.Course, { through: db.userCourse})
+db.User.belongsToMany(db.Course, { through: db.userCourse })
+db.Course.belongsToMany(db.User, { through: db.userCourse })
 
 
 module.exports = db

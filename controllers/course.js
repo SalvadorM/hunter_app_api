@@ -47,10 +47,14 @@ const courseController = {
 
         Course.create({classCode, className, section, information, userId, semesterId})
             .then(addedClass => {
-                userCourse.create({year, season, userId, courseId: addedClass.id})
-                    .then(data => {
-                        res.json(data)
-                    })
+                User.findByPk(userId)
+                    .then(user => {
+                        user.addCourse(addedClass, {through: {year, season}})
+                            .then(test => {
+                                res.json(test)
+                            })
+                            .catch(err => res.status(400).send(err))
+                    }) 
                     .catch(err => res.status(400).send(err))
             })
             .catch(err => res.status(400).send(err))
