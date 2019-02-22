@@ -12,21 +12,9 @@ const uCourseController = {
         const router = express.Router()
 
         router.get('/all', this.getAll)
-        router.get('/test/:id', this.test)
         router.get('/classmates', this.findClassmates)
 
         return router 
-    },
-    test(req, res){
-        const userId = req.params.id
-        User.findByPk(userId)
-            .then(user => {
-                console.log(user)
-                user.addCourse()
-                res.json(user)
-            }) 
-            .catch(err => res.status(400).send(err))
-
     },
     //@route    GET usercourse/all
     //@desc     Get the all the users from database
@@ -45,13 +33,17 @@ const uCourseController = {
     @desc     get all the students from courseId
     */
     findClassmates(req, res){
-        const params = req.query
-        Course.getUsers()
-            .then(users => {
-                console.log(users)
-                res.json(users)
-            })
-            .catch(err => res.status(400).send(err))
+        Course.findAll({
+            include: User,
+            through: {
+                attributes: ['id']
+            }
+        })
+        .then(data => {
+            console.log(data)
+            res.json(data)
+        })
+        .catch(err => res.status(400).send(err))
     },
 
     

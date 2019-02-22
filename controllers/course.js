@@ -49,7 +49,7 @@ const courseController = {
             .then(addedClass => {
                 User.findByPk(userId)
                     .then(user => {
-                        user.addCourse(addedClass, {through: {year, season}})
+                        user.setCourses(addedClass, {through: {year, season}})
                             .then(test => {
                                 res.json(test)
                             })
