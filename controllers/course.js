@@ -4,7 +4,6 @@ const db = require('../config/database')
 //class model 
 const Course = db.Course
 const User = db.User
-const userCourse = db.userCourse
 
 
 
@@ -39,17 +38,18 @@ const courseController = {
         const information = req.body.information 
         // after user auth userId = req.user.id
         const userId = req.body.userId
-        const semesterId = req.body.semester
 
         //userCourse 
         const season = req.body.season
         const year = req.body.year
-
-        Course.create({classCode, className, section, information, userId, semesterId})
-            .then(addedClass => {
+        
+        Course.findOrCreate({where: {classCode}, defaults: {className, section, information, userId}})
+            .spread((course, created)=> {
+                //find user to associate
                 User.findByPk(userId)
                     .then(user => {
-                        user.setCourses(addedClass, {through: {year, season}})
+                        //user / course 
+                        course.addUsers(user, {through: {year, season, classCode}}) 
                             .then(test => {
                                 res.json(test)
                             })

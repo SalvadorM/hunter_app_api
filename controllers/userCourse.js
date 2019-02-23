@@ -29,21 +29,20 @@ const uCourseController = {
     @route    GET usercourse/classmates?QUERY 
     PARAM     year
     PARAM     season
+    PARAM     section????
     PARAM     courseId
     @desc     get all the students from courseId
     */
     findClassmates(req, res){
+        const query = req.query
         Course.findAll({
-            include: User,
-            through: {
-                attributes: ['id']
-            }
+            include: [{model: User, required: true, attributes: ['id','name']}],
+            where: { classCode: query.courseid},
         })
-        .then(data => {
-            console.log(data)
-            res.json(data)
-        })
-        .catch(err => res.status(400).send(err))
+            .then(data => {
+                res.json(data)
+            })
+            .catch(err => res.status(400).send(err))
     },
 
     
