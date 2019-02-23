@@ -17,10 +17,22 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
+//sessions  
+app.use(sessions({
+    secret: 'YOO YUUR',
+    resave: false, //required
+    saveUninitialized: false
+}))
 
 //controllers
+app.use( (req, res, next) => {
+    console.log('req.session', req.session);
+    return next();
+})
+
 const controllers = require('./controllers')
 app.use(controllers)
+
 
 
 db.sequelize.sync({force:false}).then(() => {
