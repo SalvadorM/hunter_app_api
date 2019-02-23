@@ -43,7 +43,7 @@ const courseController = {
         const season = req.body.season
         const year = req.body.year
         
-        Course.findOrCreate({where: {classCode}, defaults: {className, section, information, userId}})
+        Course.findOrCreate({where: {classCode,section}, defaults: {className, information, userId}})
             .spread((course, created)=> {
                 //find user to associate
                 User.findByPk(userId)
