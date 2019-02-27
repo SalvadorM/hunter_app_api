@@ -51,7 +51,7 @@ const courseController = {
                         //user / course 
                         course.addUsers(user, {through: {year, season, classCode}}) 
                             .then(test => {
-                                res.json(test)
+                               res.json(test)
                             })
                             .catch(err => res.status(400).send(err))
                     }) 

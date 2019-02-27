@@ -13,6 +13,7 @@ const uCourseController = {
 
         router.get('/all', this.getAll)
         router.get('/classmates', this.findClassmates)
+        router.get('/userclasses', this.userClasses)
 
         return router 
     },
@@ -27,14 +28,15 @@ const uCourseController = {
     },
     /*
     @route    GET usercourse/classmates?QUERY 
-    PARAM     year
-    PARAM     season
-    PARAM     section????
-    PARAM     courseId
+    QUERY     year
+    QUERY     season
+    QUERY     section????
+    QUERY     courseId
     @desc     get all the students from courseId
     */
     findClassmates(req, res){
         const query = req.query
+ 
         Course.findAll({
             include: [{model: User, required: true, attributes: ['id','name']}],
             where: { classCode: query.courseid},
@@ -44,9 +46,24 @@ const uCourseController = {
             })
             .catch(err => res.status(400).send(err))
     },
-
-    
-    
+    /*
+    @route    GET usercourse/userclasses?QUERY 
+    QUERY     year
+    QUERY     season
+    QUERY     userId
+    @desc     get all the students from courseId
+    */
+    userClasses(req, res){
+        const query = req.query
+        userCourse.findAll({
+            where: {userId: query.userid, season: query.season, year: query.year},
+            attributes: ['courseId', 'classCode']
+        })
+            .then(results => {
+                res.json(results)
+            })
+            .catch(err => res.status(400).send(err))
+    }   
 }
 
 
