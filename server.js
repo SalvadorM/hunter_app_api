@@ -1,6 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const sessions = require('express-session')
+const passport = require('./middlewares/passportAuth')
 const cors = require('cors')
 const pg = require('pg')
 const db = require('./config/database')
@@ -17,12 +18,15 @@ const app = express()
 // app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
-//sessions  
-// app.use(sessions({
-//     secret: 'YOO YUUR',
-//     resave: false, //required
-//     saveUninitialized: false
-// }))
+sessions  
+app.use(sessions({
+    secret: 'YOO YUUR',
+    resave: false, //required
+    saveUninitialized: false
+}))
+app.use(passport.initialize())
+app.use(passport.session())
+
 
 
 
