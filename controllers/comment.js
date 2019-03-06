@@ -10,8 +10,8 @@ const CommentController = {
 
         //routes 
         router.post('/new/', this.postNewComment)
-        router.get('/post/all/:id', this.getPostComments)
-        router.get('/user/all/:id', this.getUserComments)
+        router.get('/postcomments/:postid', this.getPostComments)
+        router.get('/usercomments/:userid', this.getUserComments)
         router.delete('/:id', this.deleteComment)
         router.get('/error', this.error)
 
@@ -24,7 +24,8 @@ const CommentController = {
     const postId = req.body.postId
     const body = req.body.commentBody
     const votes = 0
-    const userId = req.user.id
+    const userId = req.body.userId
+    // const userId = req.user.id
 
     Comment.create({body,votes,userId,postId,})
         .then(comment => {res.json(comment)})
@@ -35,7 +36,7 @@ const CommentController = {
     //@route    GET comment/postall/:id
     //@desc     get all the comments from postId
     getPostComments(req, res) {
-        const postId = req.params.id
+        const postId = req.params.postid
 
         Comment.findAll({where: {postId}})
             .then(comments => {res.json(comments)})
@@ -45,7 +46,7 @@ const CommentController = {
     //@route    GET comment/user/:id
     //@desc     get all the comments by UserId
     getUserComments(req, res) {
-        const userId = req.params.id
+        const userId = req.params.userid
 
         Comment.findAll({where: {userId}})
             .then(comments => {res.json(comments)})

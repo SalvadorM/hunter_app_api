@@ -10,10 +10,11 @@ const PostController = {
         const router = express.Router()
 
         //routes
-        router.get('/getAllPost', this.getAllPost)
-        router.get('/all/:id', this.allUserPosts)
+        router.get('/all', this.getAllPost)
+        router.get('/userposts/:userid', this.getAllUserPosts)
+        router.get('/courseposts/:courseid', this.getAllCoursePosts)
         router.get('/search/:value/keywords/', this.searchInPosts)
-        router.post('/new/', this.createNewPost)
+        router.post('/new', this.createNewPost)
         router.get('/:id', this.getPostById)
         router.delete('/:id', this.deletePost)
         router.get('/error', this.error)
@@ -21,19 +22,27 @@ const PostController = {
         return router
     },
 
-    //@route    GET post/all/:id
+    //@route    GET post/userposts/:userid
+    //@PARAMS   userid
     //@desc     get all the notes from userId
-    allUserPosts(req,res){
-        const userId = req.params.id
+    getAllUserPosts(req,res){
+        const userId = req.params.userid
 
         Post.findAll({ where: {userId}})
-            .then(post => {
-                res.json(post)
-                
-            })
+            .then(allUserPosts => {res.json(allUserPosts)})
             .catch(err => res.status(400).send(err))
     },
 
+    //@route    GET post/courseposts/:userid
+    //@PARAMS   course
+    //@desc     get all the notes from userId
+    getAllCoursePosts(req, res){
+        const courseId = req.params.courseid
+
+        Post.findAll({ where: {courseId}})
+            .then( allCoursePosts => {res.json(allCoursePosts)})
+            .catch(err => res.status(400).send(err))
+    },
     //@route    GET post/all
     //@desc     get all the post in database
     getAllPost(req, res) {
@@ -46,7 +55,6 @@ const PostController = {
     //@desc     get post information by postId
     getPostById(req, res){
         const postId = req.params.id
-
         Post.findById(postId)
             .then(post => {res.json(post)})
             .catch(err => res.status(400).send(err))
@@ -57,9 +65,11 @@ const PostController = {
     createNewPost(req, res) {
         const title = req.body.title
         const body = req.body.body
-        const userId = req.user.id
+        const courseId = req.body.courseId 
+        const userId = req.body.userId
+        // const userId = req.user.id
     
-        Post.create({body, title, postId, userId})
+        Post.create({body, title, userId, courseId})
             .then(newPost => {res.json(newPost)})
             .catch(err => res.status(400).send(err))
     },

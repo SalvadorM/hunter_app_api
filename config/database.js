@@ -42,7 +42,7 @@ db.Post.belongsTo(db.User)
 db.Post.hasMany(db.Comment)
 db.Comment.belongsTo(db.Post)
 
-//1:M
+//N:M relation between 
 db.Course.hasMany(db.Post)
 db.Post.belongsTo(db.Course)
 
