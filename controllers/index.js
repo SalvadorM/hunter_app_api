@@ -12,7 +12,7 @@ const userCourse = require('./userCourse')
 router.use('/user', user)
 router.use('/class', course)
 router.use('/usercourse', userCourse)
-router.use('/post', post)
+// router.use('/post', post)
 router.use('/comment', comment)
 
 

@@ -34,14 +34,14 @@ const uCourseController = {
     QUERY     season
     QUERY     section????
     QUERY     courseId
-    @desc     returns all the students from courseId
+    @desc     returns all the students from classcode
     */
     findClassmates(req, res){
         const query = req.query
  
         Course.findAll({
             include: [{model: User, required: true, attributes: ['id','name']}],
-            where: { classCode: query.courseid},
+            where: { classCode: query.classcode},
         })
             .then(data => {
                 res.json(data)
