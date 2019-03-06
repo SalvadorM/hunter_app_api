@@ -1,4 +1,3 @@
-
 module.exports = (sequelize, DataTypes) => {
     const Course = sequelize.define('course', {
         classCode: {
@@ -22,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
         information: {
             type: DataTypes.STRING,
             allowNull: true,
-        },
+        }
     })
 
     return Course

@@ -17,6 +17,7 @@ const uCourseController = {
 
         return router 
     },
+
     //@route    GET usercourse/all
     //@desc     Get the all the users from database
     getAll(req, res) {
@@ -26,13 +27,14 @@ const uCourseController = {
             })  
             .catch(err => res.status(400).send(err))
     },
+
     /*
     @route    GET usercourse/classmates?QUERY 
     QUERY     year
     QUERY     season
     QUERY     section????
     QUERY     courseId
-    @desc     get all the students from courseId
+    @desc     returns all the students from courseId
     */
     findClassmates(req, res){
         const query = req.query
@@ -46,12 +48,13 @@ const uCourseController = {
             })
             .catch(err => res.status(400).send(err))
     },
+
     /*
     @route    GET usercourse/userclasses?QUERY 
     QUERY     year
     QUERY     season
     QUERY     userId
-    @desc     get all the students from courseId
+    @desc     gets all the classes from userId with season & year as params
     */
     userClasses(req, res){
         const query = req.query
