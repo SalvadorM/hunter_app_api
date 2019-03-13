@@ -23,9 +23,7 @@ const courseController = {
     getCourseById(req, res){
         const classId = req.params.id
         Course.findByPk(classId)
-            .then(course => {
-                res.json(course)
-            })
+            .then(course => {res.json(course)})
             .catch(err => res.status(400).json(err))
     },
 

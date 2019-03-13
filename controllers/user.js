@@ -144,7 +144,6 @@ const userController = {
     //@desc     POST request to log in user in sessions using passport 
     loginUser(req, res) {
         //return 
-        console.log(req.isAuthenticated())
         res.json({
         id: req.user.id,
         firstName: req.user.firstName,
@@ -159,7 +158,6 @@ const userController = {
     logOut(req, res) {
         req.logout()
         // req.session.destroy()
-        console.log(req.isAuthenticated())
         res.json({msg: 'logged out',})
 
     },
