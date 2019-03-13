@@ -27,6 +27,7 @@ db.Course = require('../models/Course')(sequelize, Sequelize)
 db.userCourse = require('../models/userCourse')(sequelize, Sequelize)
 db.Comment = require('../models/Comment')(sequelize, Sequelize)
 db.Post = require('../models/Post')(sequelize, Sequelize)
+db.Friendship = require('../models/Friendship')(sequelize, Sequelize)
 
 
 //relations
@@ -49,6 +50,11 @@ db.Post.belongsTo(db.Course)
 //1:M relation between user and comment 
 db.User.hasMany(db.Comment)
 db.Comment.belongsTo(db.User)
+
+//User Friendship
+// N:M relation between user and course using userCourse table join
+db.User.belongsToMany(db.User, { through: db.Friendship,  as: 'user_1',  unique: true, foreignKey: 'userId_1'})
+db.User.belongsToMany(db.User, { through: db.Friendship,  as: 'user_2',  unique: true, foreignKey: 'userId_2'})
 
 module.exports = db
 
