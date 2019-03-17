@@ -34,8 +34,7 @@ const courseController = {
         const className = req.body.className
         const section = req.body.section 
         const information = req.body.information 
-        // after user auth userId = req.user.id
-        const userId = req.body.userId
+        const userId = req.user.id
 
         //userCourse 
         const season = req.body.season

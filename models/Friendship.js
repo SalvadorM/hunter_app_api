@@ -1,19 +1,10 @@
 module.exports = (sequelize, DataTypes) => {
     const Friendship = sequelize.define('friendship', {
-        status: {
-            type: DataTypes.INTEGER(),
-            allowNull: false,
-            validate: {
-                notEmpty: true
-            }
-        },
-        action: {
-            type: DataTypes.INTEGER(),
-            allowNull: false,
-            validate: {
-                notEmpty: true
-            }
-        }
+        id: {
+            type: DataTypes.INTEGER,
+            primaryKey: true,
+            autoIncrement: true
+          },
     })
 
     return Friendship
