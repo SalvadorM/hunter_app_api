@@ -51,9 +51,8 @@ db.Post.belongsTo(db.Course)
 db.User.hasMany(db.Comment)
 db.Comment.belongsTo(db.User)
 
-db.User.belongsToMany(db.User, { as: 'Friends', through: 'friends' });
-db.User.belongsToMany(db.User, { as: 'Requestees', through: db.Friendship, foreignKey: 'requesterId'});
-db.User.belongsToMany(db.User, { as: 'Requesters', through: db.Friendship, foreignKey: 'requesteeId'});
+db.User.belongsToMany(db.User, { as: 'Friends', through: 'friends' })
+db.User.belongsToMany(db.User, { as: 'Relations', foreignKey: 'userId_1', otherKey: 'userId_2', through: db.Friendship})
+
 
 module.exports = db
-

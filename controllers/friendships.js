@@ -13,7 +13,6 @@ const FriendshipController = {
 
         router.post('/friendrequest', this.sendFriendRequest)
         router.post('/acceptrequest', this.acceptFriendRequest)
-        router.get('/checkfriendship/:request', this.checkFriendshipStatus)
         router.get('/friendlist', this.getFriendList)
 
         return router
@@ -21,26 +20,85 @@ const FriendshipController = {
 
     //@route    POST friendship/friendrequest 
     //@desc     Inserting a new friend request, from user in sessions to userId_2 
-    sendFriendRequest(req, res){
- 
+    async sendFriendRequest(req, res){
+        const requestedFriend = parseInt(req.body.request)
+        //userId_1 < userId_2
+        const userId_1 = (req.user.id < requestedFriend) ? req.user.id : requestedFriend
+        const userId_2 = (req.user.id < requestedFriend) ? requestedFriend : req.user.id 
+
+        try{ 
+            const friendshipData = { 
+                userId_1,
+                userId_2,
+                status: 0,
+                actionUser: req.user.id
+            }
+            const friendship = Friendship.create(friendshipData)
+            res.json(friendshipData)
+        }
+        catch(err){
+            console.log(err)
+            res.status(400).send(err)
+        }
+
     },
 
     //@route    POST friendship/acceptrequest 
     //@desc     Accept the friend request 
-    acceptFriendRequest(req, res){
-    },
+    async acceptFriendRequest(req, res){
+        const acceptFriend = parseInt(req.body.request)
+        //userId_1 < userId_2
+        const userId_1 = (req.user.id < acceptFriend) ? req.user.id : acceptFriend
+        const userId_2 = (req.user.id < acceptFriend) ? acceptFriend : req.user.id 
 
-    //@route    GET friendship/checkfriendship 
-    //@desc     check the status between friends 
-    checkFriendshipStatus(req, res){
 
+        //get user sequelize obj
+        try{
+            //action -> 1 => friend accepted / both are friends
+            //addFriends     bi-directional flow 
+            const friendshipData = { 
+                userId_1,
+                userId_2,
+                status: 1,
+                actionUser: req.user.id
+            }
+
+            //update friendship status 
+            const friendship = Friendship.update(friendshipData, {where: {userId_1, userId_2}})
+
+            const user1 = await User.findByPk(userId_1)
+            const user2 = await User.findByPk(userId_2)
+
+            //add bi-directional 
+            const user1_responce = await user1.addFriend(user2)
+            const test2_responce = await user2.addFriend(user1)
+
+            res.json(friendshipData)
+
+        }
+        catch(err){
+            console.log(err)
+            res.status(400).send(err)
+        }
     },
     //@route    GET friendship/friendlist 
     //@desc     get a list of user who are friends with session user 
-    getFriendList(req, res){
+    async getFriendList(req, res){
+        const sessionUser = req.user.id
+        try{
+            const user1 = await User.findByPk(sessionUser)
+
+            const uList = await user1.getFriends({ attributes: { inlude: ['password','createdAt']}})
+            res.json(uList)
+        }
+        catch(err){
+            console.log(err)
+            res.status(400).send(err)
+        }
     }
 
 }
 
 
 module.exports = FriendshipController.friendshipRouter()
+
