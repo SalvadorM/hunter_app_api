@@ -15,7 +15,13 @@ pg.defaults.ssl = true
 const app = express()
 
 //middlewares
-// app.use(cors())
+const dev = 'http://localhost:3000'
+const corsOptions = {
+    origin: dev,
+    credentials: true,
+}  
+//middlewares
+app.use(cors(corsOptions))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 sessions  
