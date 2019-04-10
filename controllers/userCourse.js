@@ -53,13 +53,13 @@ const uCourseController = {
     @route    GET usercourse/userclasses?QUERY 
     QUERY     year
     QUERY     season
-    QUERY     userId
     @desc     gets all the classes from userId with season & year as params
     */
     userClasses(req, res){
+        const userId = req.user.id
         const query = req.query
         userCourse.findAll({
-            where: {userId: query.userid, season: query.season, year: query.year},
+            where: {userId, season: query.season, year: query.year},
             attributes: ['courseId', 'classCode']
         })
             .then(results => {

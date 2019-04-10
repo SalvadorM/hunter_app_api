@@ -16,9 +16,9 @@ const app = express()
 
 //middlewares
 const dev = ['http://localhost:3000', 'https://classhub-hunter.herokuapp.com/']
-const prod = ''
+const prod = 'https://classhub-hunter.herokuapp.com/'
 const corsOptions = {
-    origin: dev,
+    origin: prod,
     credentials: true,
 }  
 //middlewares

@@ -47,8 +47,8 @@ const courseController = {
                     .then(user => {
                         //user / course 
                         course.addUsers(user, {through: {year, season, classCode}}) 
-                            .then(test => {
-                               res.json(test)
+                            .then(responce => {
+                               res.json(course)
                             })
                             .catch(err => res.status(400).send(err))
                     }) 
@@ -62,14 +62,18 @@ const courseController = {
     //@desc     delete a course record from database
     deleteCourse(req, res){
         const courseId = req.params.id
-        Course.destroy({where: {id: courseId}})
+        const userId = req.user.id
+        if(userId) {
+            Course.destroy({where: {id: courseId}})
             .then(()=> {
                 res.json({
                     message: `Course ${courseId} has been deleted`
                 })
             })
-            .catch(err => res.status(400).send(err))
+            .catch(err => res.status(400).send(err))   
+        }
     },
+
 }
 
 module.exports = courseController.courseRouter()

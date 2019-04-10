@@ -120,13 +120,14 @@ const userController = {
     //@params   id
     //@desc     update user in database
     updateUser(req, res){
-        const userId = req.params.id    
+        const userId = req.user.id    
         const username = req.body.username
         const email = req.body.email
         const password = req.body.password
         const name = req.body.name
 
-        User.update({ username, email, password, name}, {where : {id: userId}})
+        bcrypt.hash(password, null, null, (err, hashedPassword) => {
+            User.update({ username, email, password: hashedPassword, name}, {where : {id: userId}})
             .then(responce => {
                 if(responce[0] === 1){                  
                     res.status(200).json({success: 'true'})
@@ -138,6 +139,7 @@ const userController = {
                 }
             })
             .catch(err => res.status(400).send(err))
+        })
     },
 
     //@route    POST user/login
