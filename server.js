@@ -24,8 +24,7 @@ const corsOptions = {
 //middlewares
 app.use(cors(corsOptions))
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
-sessions  
+app.use(bodyParser.urlencoded({ extended: true }))  
 app.use(sessions({
     secret: 'YOO YUUR',
     resave: false, //required
