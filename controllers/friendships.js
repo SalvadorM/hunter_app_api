@@ -138,6 +138,7 @@ const FriendshipController = {
     //@route    GET friendship/requestlist 
     //@desc     get a list of request sent to the user
     async getFriendRequestList(req, res){
+        console.log('tetsetsetsetse')
         const sessionUser = req.user.id
         try{
             const uList = await Friendship.findAll({

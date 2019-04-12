@@ -1,6 +1,8 @@
 const express = require('express')
 const db = require('../config/database')
+const Sequelize = require('sequelize')
 
+const Op = Sequelize.Op
 
 //models 
 const userCourse = db.userCourse
@@ -58,12 +60,27 @@ const uCourseController = {
     userClasses(req, res){
         const userId = req.user.id
         const query = req.query
+
         userCourse.findAll({
             where: {userId, season: query.season, year: query.year},
-            attributes: ['courseId', 'classCode']
+            raw : true
         })
             .then(results => {
-                res.json(results)
+                const classesIds = results.map((val) => {
+                    return val.courseId
+                })
+                if(results.length === 0){
+                    res.json([])
+                }else{
+                    Course.findAll({
+                        where: {id: {[Op.or]: classesIds},},
+                        raw: true
+                    })
+                        .then(courses => {res.json(courses)})
+                        .catch(err => res.status(400).send(err))
+                   
+                }
+
             })
             .catch(err => res.status(400).send(err))
     }   
