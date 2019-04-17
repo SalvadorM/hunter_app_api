@@ -13,6 +13,7 @@ const courseController = {
 
         //routes for class model 
         router.get('/find/:id', this.getCourseById)
+        router.get('/findclass/:classcode', this.findCourseByClassCode)
         router.post('/add', this.addCourse)
         router.delete('/delete/:id', this.deleteCourse)
         return router
@@ -25,6 +26,19 @@ const courseController = {
         Course.findByPk(classId)
             .then(course => {res.json(course)})
             .catch(err => res.status(400).json(err))
+    },
+
+    //@route    GET /findclass/:classcode
+    //@params   classcode
+    //@desc     Get class information by id from database
+    findCourseByClassCode(req, res){
+        const classCode = req.params.classcode
+        Course.findAll({where: {classCode}})
+            .then(course => {
+                res.json(course)
+            })
+            .catch(err => {res.status(400).send(err)})
+    
     },
 
     //@route    POST /add
