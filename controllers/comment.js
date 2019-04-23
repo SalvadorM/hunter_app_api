@@ -3,6 +3,7 @@ const db = require('../config/database')
 
 //model
 const Comment = db.Comment 
+const User = db.User
 
 const CommentController = {
     commentRouter(){
@@ -24,8 +25,7 @@ const CommentController = {
     const postId = req.body.postId
     const body = req.body.commentBody
     const votes = 0
-    const userId = req.body.userId
-    // const userId = req.user.id
+    const userId = req.user.id
 
     Comment.create({body,votes,userId,postId,})
         .then(comment => {res.json(comment)})
@@ -38,7 +38,12 @@ const CommentController = {
     getPostComments(req, res) {
         const postId = req.params.postid
 
-        Comment.findAll({where: {postId}})
+        Comment.findAll({
+            include: [
+                {model: User, required: true, attributes: ['id','name', 'username']},
+            ],
+            where: {postId}
+        })
             .then(comments => {res.json(comments)})
             .catch(err => res.status(404).send(err))
     },

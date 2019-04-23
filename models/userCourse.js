@@ -14,13 +14,6 @@ module.exports = (sequelize, DataTypes) => {
                 notEmpty: true,
             },
         },
-        classCode: {
-            type: DataTypes.INTEGER(),
-            allowNull: false,
-            validate: {
-                notEmpty: true,
-            },
-        },
     })
 
     return userCourse

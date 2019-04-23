@@ -2,7 +2,9 @@ const express = require('express')
 const db = require('../config/database')
 const Sequelize = require('sequelize')
 
+//db
 const Post = db.Post
+const User = db.User
 const Op = Sequelize.Op
 
 const PostController = {
@@ -12,7 +14,7 @@ const PostController = {
         //routes
         router.get('/all', this.getAllPost)
         router.get('/userposts/:userid', this.getAllUserPosts)
-        router.get('/courseposts/:courseid', this.getAllCoursePosts)
+        router.get('/courseposts/:classcode', this.getAllCoursePosts)
         router.get('/search/:value/keywords/', this.searchInPosts)
         router.post('/new', this.createNewPost)
         router.get('/:id', this.getPostById)
@@ -37,9 +39,14 @@ const PostController = {
     //@PARAMS   course
     //@desc     get all the notes from userId
     getAllCoursePosts(req, res){
-        const courseId = req.params.courseid
+        const classCode = req.params.classcode
 
-        Post.findAll({ where: {courseId}})
+        Post.findAll({
+            include: [
+                {model: User, required: true, attributes: ['id','name', 'username']},
+            ],
+            where: {classCode}
+        })
             .then( allCoursePosts => {res.json(allCoursePosts)})
             .catch(err => res.status(400).send(err))
     },
@@ -55,7 +62,11 @@ const PostController = {
     //@desc     get post information by postId
     getPostById(req, res){
         const postId = req.params.id
-        Post.findById(postId)
+        Post.findById(postId,{
+            include: [
+                {model: User, required: true, attributes: ['id','name', 'username']},
+            ],
+        })
             .then(post => {res.json(post)})
             .catch(err => res.status(400).send(err))
     },
@@ -65,13 +76,19 @@ const PostController = {
     createNewPost(req, res) {
         const title = req.body.title
         const body = req.body.body
-        const courseId = req.body.courseId 
-        const userId = req.body.userId
-        // const userId = req.user.id
-    
-        Post.create({body, title, userId, courseId})
+        const classCode = req.body.classCode 
+        const userId = req.user.id
+        console.log(req.body)
+        if(userId){
+            Post.create({body, title, userId, classCode})
             .then(newPost => {res.json(newPost)})
-            .catch(err => res.status(400).send(err))
+            .catch(err => {
+                console.log(err)
+                res.status(400).send(err)})
+        }else {
+            res.status(401).send('Not Authorized')
+        }
+ 
     },
 
     //@route    GET /search/:value/keywords/

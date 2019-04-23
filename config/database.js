@@ -33,7 +33,7 @@ db.Friendship = require('../models/Friendship')(sequelize, Sequelize)
 //relations
 // N:M relation between user and course using userCourse table join
 db.User.belongsToMany(db.Course, { through: db.userCourse,  foreignKey: 'userId'})
-db.Course.belongsToMany(db.User, { through: db.userCourse,  foreignKey: 'courseId'})
+db.Course.belongsToMany(db.User, { through: db.userCourse,  foreignKey: 'classCode'})
 db.userCourse.belongsTo(db.User)
 db.userCourse.belongsTo(db.Course)
 
@@ -46,8 +46,12 @@ db.Post.hasMany(db.Comment)
 db.Comment.belongsTo(db.Post)
 
 //N:M relation between 
-db.Course.hasMany(db.Post)
-db.Post.belongsTo(db.Course)
+db.Course.hasMany(db.Post ,{ foreignKey: 'classCode'})
+db.Post.belongsTo(db.Course, { foreignKey: 'classCode'})
+
+//1:M relation between post and comment 
+db.Post.hasMany(db.Comment)
+db.Comment.belongsTo(db.Post)
 
 //1:M relation between user and comment 
 db.User.hasMany(db.Comment)

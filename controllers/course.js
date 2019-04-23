@@ -59,8 +59,10 @@ const courseController = {
                 User.findByPk(userId)
                     .then(user => {
                         //user / course 
-                        course.addUsers(user, {through: {year, season, classCode}}) 
+                        console.log(course)
+                        course.addUsers(user, {through: {year, season, classCode, courseClassCode: classCode}}) 
                             .then(responce => {
+                                console.log(responce)
                                res.json(course)
                             })
                             .catch(err => res.status(400).send(err))
@@ -74,13 +76,13 @@ const courseController = {
     //@params   id
     //@desc     delete a course record from database
     deleteCourse(req, res){
-        const courseId = req.params.id
+        const classCode = req.params.id
         const userId = req.user.id
         if(userId) {
-            Course.destroy({where: {id: courseId}})
+            Course.destroy({where: {classCode}})
             .then(()=> {
                 res.json({
-                    message: `Course ${courseId} has been deleted`
+                    message: `Course ${classCode} has been deleted`
                 })
             })
             .catch(err => res.status(400).send(err))   

@@ -41,14 +41,18 @@ const uCourseController = {
     findClassmates(req, res){
         const query = req.query
         userCourse.findAll({
-            include: [{model: User, required: true, attributes: ['id','name', 'username']}],
+            include: [
+                {model: User, required: true, attributes: ['id','name', 'username']},
+                {model: Course, where: {section: query.section}, attributes: []}
+            ],
             attributes: { exclude: ['year','updatedAt', 'createdAt', 'season','courseId','classCode', 'userId']},
             where: { classCode: query.classcode,
                     season: query.season,
-                    year: query.year
+                    year: query.year,
                  },
         })
             .then(data => {
+
                 res.json(data)
             })
             .catch(err => {res.status(400).send(err)})
@@ -70,19 +74,18 @@ const uCourseController = {
             raw : true
         })
             .then(results => {
-                const classesIds = results.map((val) => {
-                    return val.courseId
+                const classCodes = results.map((val) => {
+                    return val.classCode
                 })
                 if(results.length === 0){
                     res.json([])
                 }else{
                     Course.findAll({
-                        where: {id: {[Op.or]: classesIds},},
+                        where: {classCode: {[Op.or]: classCodes},},
                         raw: true
                     })
                         .then(courses => {res.json(courses)})
                         .catch(err => res.status(400).send(err))
-                   
                 }
 
             })
