@@ -15,7 +15,9 @@ const FriendshipController = {
         router.post('/acceptrequest', this.acceptFriendRequest)
         router.delete('/removefriend/:userid', this.removeFriend)
         router.get('/friendlist', this.getFriendList)
+        router.get('/profilefriendslist/:userid', this.getProfileFriendList)
         router.get('/requestlist', this.getFriendRequestList)
+        router.get('/isfriend/:friendid', this.isFriend)
 
         return router
     },
@@ -91,7 +93,9 @@ const FriendshipController = {
         try{
             const user1 = await User.findByPk(sessionUser)
 
-            const uList = await user1.getFriends({ attributes: { exclude: ['password','createdAt']}})
+            const uList = await user1.getFriends({ 
+                attributes: { exclude: ['password','createdAt', 'friends']},
+            })
             res.json(uList)
         }
         catch(err){
@@ -105,8 +109,8 @@ const FriendshipController = {
     async removeFriend(req, res){
         const friendToRemove = parseInt(req.params.userid)
         //userId_1 < userId_2
-        const userId_1 = (req.user.id < acceptFriend) ? req.user.id : acceptFriend
-        const userId_2 = (req.user.id < acceptFriend) ? acceptFriend : req.user.id 
+        const userId_1 = (req.user.id < friendToRemove) ? req.user.id : friendToRemove
+        const userId_2 = (req.user.id < friendToRemove) ? friendToRemove : req.user.id 
 
          try{
             //friendship object attributes for friendship
@@ -125,7 +129,7 @@ const FriendshipController = {
             const friendIdRemoved = await userToRemove.removeFriend(sessionUser)
 
             //update friendship 
-            const friendship = await Friendship(friendshipData, {where: {userId_1, userId_2}})
+            const friendship = await Friendship.update(friendshipData, {where: {userId_1, userId_2}})
             res.json(friendshipData)
             
         }
@@ -138,10 +142,12 @@ const FriendshipController = {
     //@route    GET friendship/requestlist 
     //@desc     get a list of request sent to the user
     async getFriendRequestList(req, res){
-        console.log('tetsetsetsetse')
         const sessionUser = req.user.id
         try{
             const uList = await Friendship.findAll({
+                include: [
+                    {model: User, required: true, attributes: ['id','name', 'username']},
+                ],
                 where: {
                     [Op.or]: [{userId_1: sessionUser}, {userId_2: sessionUser}],
                     actionUser: {[Op.ne]: sessionUser},
@@ -149,7 +155,50 @@ const FriendshipController = {
                 },
                 attributes: { exclude: ['userId_1','userId_2','updateAt',]}
               })
+            res.json(uList)
+        }
+        catch(err){
+            console.log(err)
+            res.status(400).send(err)
+        } 
+    },
 
+    //@route    friendship/isfriend/:friendid
+    //@desc     check if session user and friednid are friends 
+    async isFriend(req, res){
+        const isFriendId = parseInt(req.params.friendid)
+        //userId_1 < userId_2
+        const userId_1 = (req.user.id < isFriendId) ? req.user.id : isFriendId
+        const userId_2 = (req.user.id < isFriendId) ? isFriendId : req.user.id 
+
+        try{ 
+            let fsRes = await Friendship.findAll({
+                where: {
+                    userId_1,
+                    userId_2,
+                    status: 1,
+                },
+                raw: true,
+            })
+            let areFriends = (fsRes.length === 1)? true : false
+            res.json({
+                friend: areFriends
+            })
+        }
+        catch(err){
+            console.log(err)
+            res.status(400).send(err)
+        }
+    },
+
+    async getProfileFriendList(req, res){
+        const profileUser = req.params.userid
+        try{
+            const user1 = await User.findByPk(profileUser)
+
+            const uList = await user1.getFriends({ 
+                attributes: { exclude: ['password','createdAt', 'friends']},
+            })
             res.json(uList)
         }
         catch(err){
@@ -157,7 +206,6 @@ const FriendshipController = {
             res.status(400).send(err)
         } 
     }
-
 }
 
 

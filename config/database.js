@@ -59,6 +59,7 @@ db.Comment.belongsTo(db.User)
 
 db.User.belongsToMany(db.User, { as: 'Friends', through: 'friends' })
 db.User.belongsToMany(db.User, { as: 'Relations', foreignKey: 'userId_1', otherKey: 'userId_2', through: db.Friendship})
-
+db.Friendship.belongsTo(db.User,{ foreignKey: 'userId_1'})
+db.Friendship.belongsTo(db.User,{ foreignKey: 'userId_2'})
 
 module.exports = db

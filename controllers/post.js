@@ -29,8 +29,11 @@ const PostController = {
     //@desc     get all the notes from userId
     getAllUserPosts(req,res){
         const userId = req.params.userid
+        //
+        Post.findAll({
 
-        Post.findAll({ where: {userId}})
+             where: {userId}
+        })
             .then(allUserPosts => {res.json(allUserPosts)})
             .catch(err => res.status(400).send(err))
     },
