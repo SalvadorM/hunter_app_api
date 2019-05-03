@@ -87,14 +87,32 @@ const userController = {
         const name = req.body.name
 
 
-        bcrypt.hash(password, null, null, (err, hashedPassword) => {
-            if(err) res.status(400).send(err)
+        User.findOne({ where: { username }})
+            .then((foundUsername) => {
+                if(!foundUsername){
+                    User.findOne({ where: { email } })
+                    .then(foundEmail => {
+                        if(!foundEmail){
+                            bcrypt.hash(password, null, null, (err, hashedPassword) => {
+                                if(err) res.status(400).send(err)
+                                User.create({ username, email, password: hashedPassword, name})
+                                    .then(user => {res.json(user)})
+                                    .catch(err => res.status(400).send(err))
+                            })
+                        }
+                        else{
+                            res.json({error: true, errorMessage: `Email is taken`})
+                        }
+                    })
+                    .catch(err => {res.status(400).send(err)})
+                }
+                else{
+                    res.json({error: true, errorMessage: `Username is taken`})
+                }
 
-            User.create({ username, email, password: hashedPassword, name})
-                .then(user => {res.json(user)})
-                .catch(err => res.status(400).send(err))
+            })
+            .catch(err => {res.status(400).send(err)})
 
-        })
     },
 
     //@route    DELETE user/:id
