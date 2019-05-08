@@ -61,9 +61,9 @@ const userController = {
             if(user){
                 res.json(user)
             } else {
-                res.status(500).json({
-                    success: 'false',
-                    message: 'Error: No user found'
+                res.json({
+                    error: false,
+                    messageMessage: 'No user found'
                 })
             }
         })
