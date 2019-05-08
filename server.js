@@ -15,7 +15,7 @@ pg.defaults.ssl = true
 const app = express()
 
 //middlewares
-const dev = ['http://localhost:3000', 'https://classhub-hunter.herokuapp.com/']
+// const dev = ['http://localhost:3000', 'https://classhub-hunter.herokuapp.com/']
 const prod = 'https://classhub-hunter.herokuapp.com'
 const corsOptions = {
     origin: prod,
