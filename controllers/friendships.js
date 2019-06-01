@@ -145,20 +145,28 @@ const FriendshipController = {
         const sessionUser = req.user.id
         try{
             const uList = await Friendship.findAll({
-                include: [{
-                    model: User,
-                    attributes: { exclude: ['password','createdAt',]}
-                }],
                 where: {
                     [Op.or]: [{userId_1: sessionUser}, {userId_2: sessionUser}],
                     actionUser: {[Op.ne]: sessionUser},
                     status: 0,
                 },
-                attributes: { exclude: ['userId_1','userId_2','updateAt',]},
-              })
-         
-            console.log(uList)
-            res.json(uList)
+                attributes: { },
+                raw: true,
+              }) 
+            let friendReqList = []
+            for (let req in uList){
+                 let { actionUser, status } = uList[req]
+                
+                 if( status === 0) {
+                     let friendReq = await User.findByPk(actionUser, {attributes: { exclude: ['password','updatedAt']}, raw: true})
+                     let friend = {
+                         id: friendReq.id,
+                         username: friendReq.username
+                     }
+                     friendReqList.push(friend)
+                }
+            }
+            res.json(friendReqList)
         }
         catch(err){
             console.log(err)
