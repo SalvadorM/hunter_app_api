@@ -16,9 +16,10 @@ const app = express()
 
 //middlewares
 const dev = 'http://localhost:3000'
+const native_server = 'http://localhost:3000'
 //const prod = 'https://classhub-hunter.herokuapp.com'
 const corsOptions = {
-    origin: dev,
+    origin: native_server,
     credentials: true,
 }  
 //middlewares

@@ -6,6 +6,9 @@ const db = require('../config/database')
 
 //user models
 const User = db.User
+const Comment = db.Comment
+const Post = db.Post 
+const sequelize = db.sequelize 
 
 const userController = {
     //main func
@@ -162,15 +165,28 @@ const userController = {
 
     //@route    POST user/login
     //@desc     POST request to log in user in sessions using passport 
-    loginUser(req, res) {
-        //return 
-        res.json({
-        id: req.user.id,
-        firstName: req.user.firstName,
-        lastName: req.user.lastName,
-        email: req.user.email,
-        username: req.user.username,
-        })
+    async loginUser(req, res) {
+        try{
+            const userId = req.user.id
+            let commentRes = await Comment.findAll({ attributes: [[sequelize.fn('COUNT', sequelize.col('id')), 'comment_len']], where: {userId} , raw: true} )
+            let postRes = await Post.findAll({ attributes: [[sequelize.fn('COUNT', sequelize.col('id')), 'post_len']], where: {userId}, raw: true })
+
+            //return 
+            res.json({
+                ...commentRes[0],
+                ...postRes[0],
+                id: userId,
+                firstName: req.user.firstName,
+                lastName: req.user.lastName,
+                email: req.user.email,
+                username: req.user.username,
+                })
+        }
+        catch(e){
+            console.log(e)
+            res.status(400).send(e)
+        }   
+
     },
 
     //@route    POST user/logout

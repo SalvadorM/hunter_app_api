@@ -89,8 +89,9 @@ const FriendshipController = {
     //@route    GET friendship/friendlist 
     //@desc     get a list of user who are friends with session user 
     async getFriendList(req, res){
-        const sessionUser = req.user.id
         try{
+            const sessionUser = req.user.id
+
             const user1 = await User.findByPk(sessionUser)
 
             const uList = await user1.getFriends({ 
