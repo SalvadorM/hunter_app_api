@@ -20,6 +20,7 @@ const userController = {
         router.get('/find/:userid', this.getUserById)
         router.get('/all', this.getAllUsers)
         router.get('/username/:username', this.getUserByUsername)
+        router.get('/info', this.userInfo)
         router.post('/create', this.createUser)
         router.put('/update/:id', this.updateUser)
         router.delete('/:id', this.deleteUser)
@@ -165,7 +166,19 @@ const userController = {
 
     //@route    POST user/login
     //@desc     POST request to log in user in sessions using passport 
-    async loginUser(req, res) {
+    loginUser(req, res) {
+        //return 
+        res.json({
+            id: req.user.id,
+            firstName: req.user.firstName,
+            lastName: req.user.lastName,
+            email: req.user.email,
+            username: req.user.username,
+            })
+    },
+    //@route    GET user/info
+    //@desc     GET request user info
+    async userInfo(req, res){
         try{
             const userId = req.user.id
             let commentRes = await Comment.findAll({ attributes: [[sequelize.fn('COUNT', sequelize.col('id')), 'comment_len']], where: {userId} , raw: true} )
@@ -175,12 +188,7 @@ const userController = {
             res.json({
                 ...commentRes[0],
                 ...postRes[0],
-                id: userId,
-                firstName: req.user.firstName,
-                lastName: req.user.lastName,
-                email: req.user.email,
-                username: req.user.username,
-                })
+            })
         }
         catch(e){
             console.log(e)
