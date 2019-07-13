@@ -15,6 +15,7 @@ const FriendshipController = {
         router.post('/acceptrequest', this.acceptFriendRequest)
         router.delete('/removefriend/:userid', this.removeFriend)
         router.get('/friendlist', this.getFriendList)
+        router.get('/checkstatus/:friendid', this.checkStatus)
         router.get('/profilefriendslist/:userid', this.getProfileFriendList)
         router.get('/requestlist', this.getFriendRequestList)
         router.get('/isfriend/:friendid', this.isFriend)
@@ -25,12 +26,12 @@ const FriendshipController = {
     //@route    POST friendship/friendrequest 
     //@desc     Inserting a new friend request, from user in sessions to userId_2 
     async sendFriendRequest(req, res){
-        const requestedFriend = parseInt(req.body.request)
-        //userId_1 < userId_2
-        const userId_1 = (req.user.id < requestedFriend) ? req.user.id : requestedFriend
-        const userId_2 = (req.user.id < requestedFriend) ? requestedFriend : req.user.id 
-
         try{ 
+            const requestedFriend = parseInt(req.body.request)
+            //userId_1 < userId_2
+            const userId_1 = (req.user.id < requestedFriend) ? req.user.id : requestedFriend
+            const userId_2 = (req.user.id < requestedFriend) ? requestedFriend : req.user.id 
+    
             const friendshipData = { 
                 userId_1,
                 userId_2,
@@ -47,17 +48,36 @@ const FriendshipController = {
 
     },
 
+    //@route    POST friendship/checkstatus
+    //@desc     checks for the stautus of friendship 
+    async checkStatus(req, res){
+        try{ 
+            const requestedFriend = parseInt(req.params.friendid)
+   
+            //userId_1 < userId_2
+            const userId_1 = (req.user.id < requestedFriend) ? req.user.id : requestedFriend
+            const userId_2 = (req.user.id < requestedFriend) ? requestedFriend : req.user.id 
+            console.log(userId_1, userId_2)
+            const friendship = await Friendship.findOne({where: {userId_1, userId_2}})
+            res.json(friendship)
+        }
+        catch(err){
+            console.log(err)
+            res.status(400).send(err)
+        }
+    },
+
     //@route    POST friendship/acceptrequest 
     //@desc     Accept the friend request 
     async acceptFriendRequest(req, res){
-        const acceptFriend = parseInt(req.body.request)
-        //userId_1 < userId_2
-        const userId_1 = (req.user.id < acceptFriend) ? req.user.id : acceptFriend
-        const userId_2 = (req.user.id < acceptFriend) ? acceptFriend : req.user.id 
-
-
-        //get user sequelize obj
         try{
+            const acceptFriend = parseInt(req.body.request)
+            //userId_1 < userId_2
+            const userId_1 = (req.user.id < acceptFriend) ? req.user.id : acceptFriend
+            const userId_2 = (req.user.id < acceptFriend) ? acceptFriend : req.user.id 
+    
+    
+            //get user sequelize obj
             //action -> 1 => friend accepted / both are friends
             //addFriends     bi-directional flow 
             const friendshipData = { 
@@ -108,12 +128,12 @@ const FriendshipController = {
     //@route    DELETE friendship/removefriend/:userid 
     //@desc     remove bi-directional link between users and update friendship status
     async removeFriend(req, res){
-        const friendToRemove = parseInt(req.params.userid)
-        //userId_1 < userId_2
-        const userId_1 = (req.user.id < friendToRemove) ? req.user.id : friendToRemove
-        const userId_2 = (req.user.id < friendToRemove) ? friendToRemove : req.user.id 
-
          try{
+            const friendToRemove = parseInt(req.params.userid)
+            //userId_1 < userId_2
+            const userId_1 = (req.user.id < friendToRemove) ? req.user.id : friendToRemove
+            const userId_2 = (req.user.id < friendToRemove) ? friendToRemove : req.user.id 
+    
             //friendship object attributes for friendship
             const friendshipData = { 
                 userId_1,
@@ -143,8 +163,9 @@ const FriendshipController = {
     //@route    GET friendship/requestlist 
     //@desc     get a list of request sent to the user
     async getFriendRequestList(req, res){
-        const sessionUser = req.user.id
         try{
+            const sessionUser = req.user.id
+
             const uList = await Friendship.findAll({
                 where: {
                     [Op.or]: [{userId_1: sessionUser}, {userId_2: sessionUser}],
@@ -178,12 +199,12 @@ const FriendshipController = {
     //@route    friendship/isfriend/:friendid
     //@desc     check if session user and friednid are friends 
     async isFriend(req, res){
-        const isFriendId = parseInt(req.params.friendid)
-        //userId_1 < userId_2
-        const userId_1 = (req.user.id < isFriendId) ? req.user.id : isFriendId
-        const userId_2 = (req.user.id < isFriendId) ? isFriendId : req.user.id 
-
         try{ 
+            const isFriendId = parseInt(req.params.friendid)
+            //userId_1 < userId_2
+            const userId_1 = (req.user.id < isFriendId) ? req.user.id : isFriendId
+            const userId_2 = (req.user.id < isFriendId) ? isFriendId : req.user.id 
+    
             let fsRes = await Friendship.findAll({
                 where: {
                     userId_1,
@@ -204,8 +225,9 @@ const FriendshipController = {
     },
 
     async getProfileFriendList(req, res){
-        const profileUser = req.params.userid
         try{
+            const profileUser = req.params.userid
+
             const user1 = await User.findByPk(profileUser)
 
             const uList = await user1.getFriends({ 
