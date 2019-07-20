@@ -53,7 +53,12 @@ const CommentController = {
     getUserComments(req, res) {
         const userId = req.params.userid
 
-        Comment.findAll({where: {userId}})
+        Comment.findAll({
+            include: [
+                {model: User, required: true, attributes: ['id','name', 'username']},
+            ],
+            where: {userId}
+        })
             .then(comments => {res.json(comments)})
             .catch(err => res.status(404).send(err))
     },
