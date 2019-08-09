@@ -28,6 +28,8 @@ db.userCourse = require('../models/userCourse')(sequelize, Sequelize)
 db.Comment = require('../models/Comment')(sequelize, Sequelize)
 db.Post = require('../models/Post')(sequelize, Sequelize)
 db.Friendship = require('../models/Friendship')(sequelize, Sequelize)
+db.Message = require('../models/Message')(sequelize, Sequelize)
+db.ChatRoom = require('../models/ChatRoom')(sequelize, Sequelize)
 
 
 //relations
@@ -62,6 +64,12 @@ db.User.belongsToMany(db.User, { as: 'Relations', foreignKey: 'userId_1', otherK
 
 db.Friendship.belongsTo(db.User,{ foreignKey: 'userId_1', targetKey: 'id'})
 db.Friendship.belongsTo(db.User,{ foreignKey: 'userId_2', targetKey: 'id'})
+
+//Chat Room 
+db.ChatRoom.belongsTo(db.User, { foreignKey: 'chatMember', targetKey: 'id'})
+db.ChatRoom.belongsToMany(db.Message, { through: 'chat'})
+db.Message.belongsTo(db.User,{ foreignKey: 'actionUser', targetKey: 'id'})
+
 
 
 module.exports = db
