@@ -1,4 +1,9 @@
 const express = require('express')
+//init app
+const app = express()
+const server = require('http').Server(app)
+const io = module.exports.io = require('socket.io')(server)
+const socketManager = require('./socketManager')
 const bodyParser = require('body-parser')
 const sessions = require('express-session')
 const passport = require('./middlewares/passportAuth')
@@ -11,8 +16,7 @@ const db = require('./config/database')
 const PORT = process.env.PORT || 8000
 pg.defaults.ssl = true
 
-//init app
-const app = express()
+
 
 //middlewares
 const dev = 'http://localhost:3000'
@@ -40,8 +44,10 @@ app.use(passport.session())
 const controllers = require('./controllers')
 app.use(controllers)
 
+io.on('connection', socketManager)
 
 
 db.sequelize.sync({force: false}).then(() => {
-    app.listen(PORT, () => console.log(`app listening on port ${PORT}!`))
-})
+    server.listen(PORT, () => console.log(`app listening on port ${PORT}!`))
+}) 
+
