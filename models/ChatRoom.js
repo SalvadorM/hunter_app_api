@@ -5,7 +5,14 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             validate: {
                 notEmpty: true
-            }
+            },  
+        }, 
+        chatId: {
+            type: DataTypes.INTEGER(),
+            allowNull: false,
+            validate: {
+                notEmpty: true
+            },  
         }, 
     })
 
