@@ -3,7 +3,7 @@ const db = require('../config/database')
 
 //model
 const Message = db.Message 
-const ChatRoom = db.User
+const Chat= db.Chat
 
 const ChatController = {
     chatRouter(){
@@ -26,9 +26,23 @@ const ChatController = {
             const otherUserId = req.body.otherUserId
             const message = req.body.message  
 
+            const chatName = `chatM-${userSessionId}-${otherUserId}`
             const newMessage = await Message.create({actionUser: userSessionId, body: message})
+            const newChat = await Chat.create({chatName})
 
+            console.log('-----')
             console.log(newMessage)
+
+            console.log('-----')
+
+            console.log(newChat)
+
+            const newMessageRes = newChat.addMessage(newMessage)
+
+            console.log('-----')
+            console.log(newMessageRes)
+
+
 
             res.json(newMessage)
 
