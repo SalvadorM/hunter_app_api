@@ -47,7 +47,7 @@ app.use(controllers)
 io.on('connection', socketManager)
 
 
-db.sequelize.sync({force: false}).then(() => {
+db.sequelize.sync({force: true}).then(() => {
     server.listen(PORT, () => console.log(`app listening on port ${PORT}!`))
 }) 
 

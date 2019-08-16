@@ -4,6 +4,7 @@ const db = require('../config/database')
 //model
 const Message = db.Message 
 const Chat= db.Chat
+const User = db.User
 
 const ChatController = {
     chatRouter(){
@@ -26,23 +27,15 @@ const ChatController = {
             const otherUserId = req.body.otherUserId
             const message = req.body.message  
 
+            const profileUser = await User.findByPk(userSessionId)
+            const otherProfileUser = await User.findByPk(otherUserId)
             const chatName = `chatM-${userSessionId}-${otherUserId}`
             const newMessage = await Message.create({actionUser: userSessionId, body: message})
             const newChat = await Chat.create({chatName})
 
-            console.log('-----')
-            console.log(newMessage)
-
-            console.log('-----')
-
-            console.log(newChat)
-
+            const profile_1_res = newChat.addMember(profileUser)
+            const profile_2_res = newChat.addMember(otherProfileUser)
             const newMessageRes = newChat.addMessage(newMessage)
-
-            console.log('-----')
-            console.log(newMessageRes)
-
-
 
             res.json(newMessage)
 
@@ -57,14 +50,16 @@ const ChatController = {
     //@desc     save new message to database
     async getChatMessages(req, res) {
         try{
-            const chatId = req.body.chatid
+            const chatId = req.params.chatid
 
-            const chatRoom = await ChatRoom.findByPk(chatId)
-
-            const messages = await chatRoom.getChatMessages()
-
-            console.log(messages)
-
+            const currentChat = await Chat.findByPk(chatId)
+            const messages = await currentChat.getMessages({
+                include: [{
+                    model: User,
+                    attributes: { exclude: ['password','updatedAt']}
+                }],
+                
+            })
             res.json(messages)
             
         } catch(e) {
@@ -95,5 +90,6 @@ const ChatController = {
         res.sendStatus(401)
     },
 }
+
 
 module.exports = ChatController.chatRouter()

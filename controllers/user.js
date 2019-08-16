@@ -27,10 +27,41 @@ const userController = {
         router.post('/login', passport.authenticate('local', {failureRedirect: '/user/error'}), this.loginUser)
         router.post('/logout', this.logOut)
         router.get('/error', this.error)
+        router.get('/test', this.testFunc)
         
         return router
     },
+    async testFunc(req, res){
+        try{
+            users = [{
+                username:'kanye',
+                email: "kanye@mail.com",
+                password: '123',
+                name:'kanye'
+            },{
+                username:'kim',
+                email: "kim@mail.com",
+                password: '123',
+                name:'kim'
+            }]
 
+            bcrypt.hash('123', null, null, (err, hashedPassword) => {
+                User.create({ username:'kanye', email:"kanye@mail.com", password: hashedPassword, name:`kanye`})
+                    .then(user => console.log(user))
+            })           
+   
+
+            bcrypt.hash('123', null, null, (err, hashedPassword) => {
+                User.create({ username:'kim', email:"kim@mail.com", password: hashedPassword, name:`kim`})
+                    .then(user => console.log(user))
+            })       
+
+            res.json({status: true})
+        } catch(e){
+            console.log(e)
+            res.status(400).send(e)
+        }
+    },
     //@route    GET user/:id
     //@params   id
     //@desc     Get the user from database
