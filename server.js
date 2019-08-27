@@ -46,8 +46,9 @@ app.use(controllers)
 
 io.on('connection', socketManager)
 
+const resetDatabase = false
 
-db.sequelize.sync({force: true}).then(() => {
+db.sequelize.sync({force: resetDatabase}).then(() => {
     server.listen(PORT, () => console.log(`app listening on port ${PORT}!`))
 }) 
 

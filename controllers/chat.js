@@ -11,7 +11,8 @@ const ChatController = {
         const router = express.Router()
 
         //routes 
-        router.post('/messages/new', this.newChatMessage)
+        router.post('/messages/createchat', this.createNewChat)
+        router.post('/messages/new', this.addNewMessage)
         router.get('/messages/:chatid', this.getChatMessages)
         router.get('/info/:chatid', this.getChatInfo)
         router.get('/error', this.error)
@@ -21,7 +22,31 @@ const ChatController = {
 
     //@route    POST chat/messages/new
     //@desc     save new message to database
-    async newChatMessage(req, res) {
+    async addNewMessage(req, res){
+        try {
+            const chatId = req.body.chatid
+            const currentUser = req.user.id
+            const messageBody = req.body.message
+
+            const currentChat = await Chat.findByPk(chatId)
+            const message = await Message.create({actionUser: currentUser, body: messageBody})
+            const addedMessage = await currentChat.addMessage(message)
+
+            console.log(addedMessage)
+            res.json({
+                succes: true
+            })
+            
+            
+        } catch(e){
+            console.log(e)
+            res.status(400).send(e)
+        }
+    },
+
+    //@route    POST chat/messages/createChat
+    //@desc     create a new message chat 
+    async createNewChat(req, res) {
         try{
             const userSessionId = req.user.id
             const otherUserId = req.body.otherUserId
@@ -54,9 +79,11 @@ const ChatController = {
 
             const currentChat = await Chat.findByPk(chatId)
             const messages = await currentChat.getMessages({
+                // scope: null,
+                attributes: { exclude: ['chatId',]},
                 include: [{
                     model: User,
-                    attributes: { exclude: ['password','updatedAt']}
+                    attributes: { exclude: ['password','updatedAt','createdAt', 'chatId', 'name', 'email']}
                 }],
                 
             })
@@ -73,7 +100,7 @@ const ChatController = {
     async getChatInfo(req, res) {
         try{
             const chatId = req.params.chatid 
-            const chatRoom = await ChatRoom.findByPk(chatId)
+            const chatRoom = await Chat.findByPk(chatId)
 
             console.log(chatRoom)
             res.json(chatRoom)
