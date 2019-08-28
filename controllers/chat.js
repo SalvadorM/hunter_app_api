@@ -16,6 +16,7 @@ const ChatController = {
         router.get('/messages/:chatid', this.getChatMessages)
         router.get('/info/:chatid', this.getChatInfo)
         router.get('/userchats', this.getUserChats)
+        router.get('/ismember/:chatid', this.isUserChatMember)
         router.get('/error', this.error)
 
         return router;
@@ -134,6 +135,40 @@ const ChatController = {
             const userChats = await userFound.getChats()
 
             res.json(userChats)
+
+        } catch(e) {
+            console.log(e)
+            res.status(400).send(e)
+        }
+    },
+
+            
+    //@route    GET chat/userid 
+    //@desc     check if user in a chat member
+    async isUserChatMember(req, res){
+        try{
+            const sessionUser = req.user.id 
+            const chatId = req.params.chatid 
+
+            const currentChat = await Chat.findByPk(chatId)
+
+            if(currentChat) {
+                const chatUsers = await currentChat.getMembers({raw: true})
+
+                let userFound = false 
+                for (user in chatUsers) {
+                    if(chatUsers[user].id === sessionUser){
+                        userFound = true
+                    }
+                }
+    
+                res.json({
+                    success: userFound
+                })
+            } else {
+                res.json({ success: false})
+            }
+
 
         } catch(e) {
             console.log(e)
