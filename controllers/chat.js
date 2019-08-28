@@ -15,6 +15,7 @@ const ChatController = {
         router.post('/messages/new', this.addNewMessage)
         router.get('/messages/:chatid', this.getChatMessages)
         router.get('/info/:chatid', this.getChatInfo)
+        router.get('/userchats', this.getUserChats)
         router.get('/error', this.error)
 
         return router;
@@ -54,12 +55,23 @@ const ChatController = {
 
             const profileUser = await User.findByPk(userSessionId)
             const otherProfileUser = await User.findByPk(otherUserId)
-            const chatName = `chatM-${userSessionId}-${otherUserId}`
+            const chatName = `chat-${profileUser.username}-${otherProfileUser.username}`
+
+            //create new message 
             const newMessage = await Message.create({actionUser: userSessionId, body: message})
+
+            //create new chat
             const newChat = await Chat.create({chatName})
 
+            //add members to chat 
             const profile_1_res = newChat.addMember(profileUser)
             const profile_2_res = newChat.addMember(otherProfileUser)
+
+            //add chat to user
+            const userChat_1_res = profileUser.addChat(newChat)
+            const userChat_2_res = otherProfileUser.addChat(newChat)
+
+            //add messafe to chat
             const newMessageRes = newChat.addMessage(newMessage)
 
             res.json(newMessage)
@@ -110,8 +122,26 @@ const ChatController = {
             res.status(400).send(e)
         }
     },
+        
+    //@route    GET chat/userid 
+    //@desc     get userid chats 
+    async getUserChats(req, res) {
+        try{
+            const userId = req.user.id
 
-    //@route    GET comment/error
+            const userFound = await User.findByPk(userId)
+
+            const userChats = await userFound.getChats()
+
+            res.json(userChats)
+
+        } catch(e) {
+            console.log(e)
+            res.status(400).send(e)
+        }
+    },
+
+    //@route    GET chat/error
     //@desc     not authorized 
     error(req, res) {
         res.sendStatus(401)

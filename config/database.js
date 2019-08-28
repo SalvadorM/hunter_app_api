@@ -70,11 +70,11 @@ db.Friendship.belongsTo(db.User,{ foreignKey: 'userId_2', targetKey: 'id'})
 db.Chat.belongsToMany(db.User, { as:'Members', through: 'chatMembers'})
 db.User.belongsTo(db.Chat)
 
+db.User.belongsToMany(db.Chat, { as:'Chats', through: 'UserChats'})
+
 
 db.Chat.belongsToMany(db.Message, { as:'Messages', through: 'chatMessages'})
 db.Message.belongsTo(db.Chat)
-
-
 
 db.Message.belongsTo(db.User,{ foreignKey: 'actionUser', targetKey: 'id'})
 
