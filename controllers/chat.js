@@ -98,9 +98,22 @@ const ChatController = {
                     model: User,
                     attributes: { exclude: ['password','updatedAt','createdAt', 'chatId', 'name', 'email']}
                 }],
+                // order: [['createdAt', 'DESC']],
+                raw: true,
                 
             })
-            res.json(messages)
+
+            const cleanMessages = messages.map((val, i) => {
+                    let tmp = {
+                     messageBody: val.body, 
+                     actionUser: val.actionUser,
+                     actionUsername: val['user.username'],
+                     createdAt: val.createdAt,
+                    }
+                    return tmp
+            })
+
+            res.json(cleanMessages)
             
         } catch(e) {
             console.log(e)
