@@ -1,5 +1,8 @@
 const express = require('express')
 const db = require('../config/database')
+const Sequelize = require('sequelize')
+const Op = Sequelize.Op
+
 
 //model
 const Message = db.Message 
@@ -17,6 +20,7 @@ const ChatController = {
         router.get('/info/:chatid', this.getChatInfo)
         router.get('/userchats', this.getUserChats)
         router.get('/ismember/:chatid', this.isUserChatMember)
+        router.get('/haschat/:chatName', this.hasChat)
         router.get('/error', this.error)
 
         return router;
@@ -52,14 +56,10 @@ const ChatController = {
         try{
             const userSessionId = req.user.id
             const otherUserId = req.body.otherUserId
-            const message = req.body.message  
 
             const profileUser = await User.findByPk(userSessionId)
             const otherProfileUser = await User.findByPk(otherUserId)
             const chatName = `chat-${profileUser.username}-${otherProfileUser.username}`
-
-            //create new message 
-            const newMessage = await Message.create({actionUser: userSessionId, body: message})
 
             //create new chat
             const newChat = await Chat.create({chatName})
@@ -73,9 +73,8 @@ const ChatController = {
             const userChat_2_res = otherProfileUser.addChat(newChat)
 
             //add messafe to chat
-            const newMessageRes = newChat.addMessage(newMessage)
 
-            res.json(newMessage)
+            res.json(newChat)
 
 
         } catch(e) {
@@ -184,6 +183,24 @@ const ChatController = {
 
 
         } catch(e) {
+            console.log(e)
+            res.status(400).send(e)
+        }
+    },
+
+    async hasChat(req, res) {
+        try{
+            const chatName = req.params.chatName
+
+            const chatFound = await Chat.findAll({
+                where: { chatName }
+            })
+
+            console.log(chatFound)
+
+            res.json({test: 'test'})
+        }
+        catch(e) {
             console.log(e)
             res.status(400).send(e)
         }
