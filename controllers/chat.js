@@ -20,7 +20,7 @@ const ChatController = {
         router.get('/info/:chatid', this.getChatInfo)
         router.get('/userchats', this.getUserChats)
         router.get('/ismember/:chatid', this.isUserChatMember)
-        router.get('/haschat/:chatName', this.hasChat)
+        router.get('/haschat/:otherUserId', this.hasChat)
         router.get('/error', this.error)
 
         return router;
@@ -190,15 +190,27 @@ const ChatController = {
 
     async hasChat(req, res) {
         try{
-            const chatName = req.params.chatName
-
-            const chatFound = await Chat.findAll({
-                where: { chatName }
+            const sessionUserId = req.user.id
+            const otherUserId = parseInt(req.params.otherUserId)
+            const sessionUser = await User.findByPk(sessionUserId)
+            const sessionUserChats = await sessionUser.getChats({
+                include: [
+                    {model: User, as: "Members", required: true, attributes: ['id','name', 'username']},
+                ],  
+                raw: true          
             })
 
-            console.log(chatFound)
+            let userFound = false
+            let chatId = null 
+            for ( user in sessionUserChats) {
+                if(sessionUserChats[user]['Members.id'] === otherUserId){
+                    userFound = true
+                    chatId = sessionUserChats[user].id
+                }
+            }
 
-            res.json({test: 'test'})
+
+            res.json({success: userFound, chatId})
         }
         catch(e) {
             console.log(e)
