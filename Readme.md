@@ -13,6 +13,12 @@ npm install
 npm run dev
 ```
 
+## web endpoint
+
+```
+https://hunter-app-api.herokuapp.com/
+```
+
 ## Routes 
     /user 
     /class
@@ -20,14 +26,15 @@ npm run dev
     /post
     /comment
     /friendship
+    /messages
 
 ### Built With
 
 * [Node.js](https://nodejs.org/en/docs/) - Nodejs
 * [Express.js](https://nodejs.org/en/docs/) - web framework for Nodejs
 * [axios](https://www.npmjs.com/package/axios) -  Axios for fetching calls
-* [sequelize](http://docs.sequelizejs.com/) -  Database
-
+* [sequelize](http://docs.sequelizejs.com/) -  Promise-based Node.js ORM for Postgres
+* [Socket.io](https://socket.io/) -  real-time bidirectional event-based communication
 
 
 ## Author

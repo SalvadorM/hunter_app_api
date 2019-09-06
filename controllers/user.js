@@ -33,26 +33,15 @@ const userController = {
     },
     async testFunc(req, res){
         try{
-            users = [{
-                username:'kanye',
-                email: "kanye@mail.com",
-                password: '123',
-                name:'kanye'
-            },{
-                username:'kim',
-                email: "kim@mail.com",
-                password: '123',
-                name:'kim'
-            }]
 
-            bcrypt.hash('123', null, null, (err, hashedPassword) => {
-                User.create({ username:'kanye', email:"kanye@mail.com", password: hashedPassword, name:`kanye`})
+            bcrypt.hash('12345a', null, null, (err, hashedPassword) => {
+                User.create({ username:'salva_awesome', email:"salvador@mail.com", password: hashedPassword, name:`Salvador`})
                     .then(user => console.log(user))
             })           
    
 
-            bcrypt.hash('123', null, null, (err, hashedPassword) => {
-                User.create({ username:'kim', email:"kim@mail.com", password: hashedPassword, name:`kim`})
+            bcrypt.hash('12345a', null, null, (err, hashedPassword) => {
+                User.create({ username:'sarai_awesome2', email:"sarai@mail.com", password: hashedPassword, name:`Sarai`})
                     .then(user => console.log(user))
             })       
 
