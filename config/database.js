@@ -29,7 +29,7 @@ db.Comment = require('../models/Comment')(sequelize, Sequelize)
 db.Post = require('../models/Post')(sequelize, Sequelize)
 db.Friendship = require('../models/Friendship')(sequelize, Sequelize)
 db.Message = require('../models/Message')(sequelize, Sequelize)
-db.ChatRoom = require('../models/ChatRoom')(sequelize, Sequelize)
+db.Chat = require('../models/Chat')(sequelize, Sequelize)
 
 
 //relations
@@ -66,10 +66,17 @@ db.Friendship.belongsTo(db.User,{ foreignKey: 'userId_1', targetKey: 'id'})
 db.Friendship.belongsTo(db.User,{ foreignKey: 'userId_2', targetKey: 'id'})
 
 //Chat Room 
-db.ChatRoom.belongsTo(db.User, { foreignKey: 'chatMember', targetKey: 'id'})
-db.ChatRoom.belongsToMany(db.Message, { through: 'chat'})
-db.Message.belongsTo(db.User,{ foreignKey: 'actionUser', targetKey: 'id'})
 
+db.Chat.belongsToMany(db.User, { as:'Members', through: 'chatMembers'})
+db.User.belongsTo(db.Chat)
+
+db.User.belongsToMany(db.Chat, { as:'Chats', through: 'UserChats'})
+
+
+db.Chat.belongsToMany(db.Message, { as:'Messages', through: 'chatMessages'})
+db.Message.belongsTo(db.Chat)
+
+db.Message.belongsTo(db.User,{ foreignKey: 'actionUser', targetKey: 'id'})
 
 
 module.exports = db
