@@ -1,11 +1,6 @@
 const io = require('./server').io
 const db = require('./config/database')
 
-io.configure(function () { 
-    io.set("transports", ["xhr-polling"]); 
-    io.set("polling duration", 10); 
-  });
-
 const Chat = db.Chat
 const Message = db.Message
 
