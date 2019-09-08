@@ -44,11 +44,6 @@ app.use(passport.session())
 const controllers = require('./controllers')
 app.use(controllers)
 
-io.configure(function () { 
-    io.set("transports", ["xhr-polling"]); 
-    io.set("polling duration", 10); 
-  });
-
 io.on('connection', socketManager)
 
 const resetDatabase = false
