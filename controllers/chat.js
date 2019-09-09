@@ -38,7 +38,6 @@ const ChatController = {
             const message = await Message.create({actionUser: currentUser, body: messageBody})
             const addedMessage = await currentChat.addMessage(message)
 
-            console.log(addedMessage)
             res.json({
                 succes: true
             })
@@ -127,7 +126,6 @@ const ChatController = {
             const chatId = req.params.chatid 
             const chatRoom = await Chat.findByPk(chatId)
 
-            console.log(chatRoom)
             res.json(chatRoom)
 
         } catch(e) {
