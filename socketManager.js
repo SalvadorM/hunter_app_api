@@ -5,6 +5,7 @@ const Chat = db.Chat
 const Message = db.Message
 
 module.exports = (socket) => {
+    console.log(socket)
     /*
         make user joing the chat room using chatId
     */
