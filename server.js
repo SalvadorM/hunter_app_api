@@ -19,15 +19,24 @@ pg.defaults.ssl = true
 
 
 //middlewares
-// const dev = 'http://localhost:3000'
-// const native_server = 'http://localhost:3000'
-let prod = 'https://classhub-hunter.herokuapp.com'
-const corsOptions = {
-    origin: prod,
-    credentials: true,
-}  
+const whitelist = [
+    'http://localhost:3000',
+    'https://classhub-hunter.herokuapp.com',
+    '192.168.1.4:3000'
+  ];
 //middlewares
-app.use(cors(corsOptions))
+app.use(
+    cors({
+        origin: function(origin, callback) {
+          if (!origin || whitelist.indexOf(origin) !== -1) {
+            callback(null, true);
+          } else {
+            callback(new Error('Not allowed by CORS'));
+          }
+        },
+        credentials: true
+      })
+)
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))  
 app.use(sessions({
