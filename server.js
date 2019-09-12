@@ -42,7 +42,9 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(sessions({
     secret: 'YOO YUUR',
     resave: false, //required
-    saveUninitialized: false
+    saveUninitialized: false,
+    cookie: { httpOnly: false }
+
 }))
 app.use(passport.initialize())
 app.use(passport.session())
