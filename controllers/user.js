@@ -221,7 +221,6 @@ const userController = {
     //@desc     POST request to log out 
     logOut(req, res) {
         req.logout()
-        // req.session.destroy()
         res.json({msg: 'logged out',})
 
     },

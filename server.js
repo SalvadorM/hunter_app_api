@@ -45,6 +45,7 @@ app.use(sessions({
     resave: false, //required
     saveUninitialized: false,
     cookie: {
+        secure : true,
         expires: 600000
     }
 }))
