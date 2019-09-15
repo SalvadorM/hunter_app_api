@@ -44,10 +44,6 @@ app.use(sessions({
     secret: 'YOO YUUR',
     resave: false, //required
     saveUninitialized: false,
-    cookie: {
-        secure : true,
-        expires: 600000
-    }
 }))
 app.use(passport.initialize())
 app.use(passport.session())
