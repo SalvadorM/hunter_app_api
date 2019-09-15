@@ -55,6 +55,10 @@ app.use(sessions({
     saveUninitialized: false,
     store: mySessionStore,
     proxy: true,
+    cookie: {
+      secure: true,
+      httpOnly: true,
+    }
 }))
 app.use(passport.initialize())
 app.use(passport.session())
