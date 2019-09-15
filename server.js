@@ -55,9 +55,6 @@ app.use(sessions({
     saveUninitialized: false,
     store: mySessionStore,
     proxy: true,
-    cookie: {
-      domain: 'https://classhub-hunter.herokuapp.com'
-    }
 }))
 app.use(passport.initialize())
 app.use(passport.session())
