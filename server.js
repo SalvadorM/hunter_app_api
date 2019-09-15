@@ -10,13 +10,18 @@ const passport = require('./middlewares/passportAuth')
 const cors = require('cors')
 const pg = require('pg')
 const db = require('./config/database')
+const SequelizeStore = require('connect-session-sequelize')(sessions.Store);
 
+//session store 
+const mySessionStore = new SequelizeStore({
+  db: db.sequelize
+})
+
+mySessionStore.sync()
 
 //heroku setting
 const PORT = process.env.PORT || 8000
 pg.defaults.ssl = true
-
-
 
 //middlewares
 const whitelist = [
@@ -26,6 +31,8 @@ const whitelist = [
     '192.168.1.4:3000'
   ];
 //middlewares
+app.set('trust proxy', 1)
+
 app.use(
     cors({
         origin: function(origin, callback) {
@@ -39,11 +46,15 @@ app.use(
       })
 )
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))  
+app.use(bodyParser.urlencoded({ extended: true })) 
+
+
 app.use(sessions({
     secret: 'YOO YUUR',
     resave: false, //required
     saveUninitialized: false,
+    store: mySessionStore,
+    proxy: true,
 }))
 app.use(passport.initialize())
 app.use(passport.session())
