@@ -54,7 +54,7 @@ app.use(sessions({
     resave: false, //required
     saveUninitialized: false,
     store: mySessionStore,
-    // proxy: true,
+    proxy: true,
     cookie: {
       // secure: true,
       httpOnly: false,
