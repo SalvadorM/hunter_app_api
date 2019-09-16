@@ -2,15 +2,15 @@ const express = require('express')
 //init app
 const app = express()
 const server = require('http').Server(app)
-const io = module.exports.io = require('socket.io')(server)
-const socketManager = require('./socketManager')
 const bodyParser = require('body-parser')
 const sessions = require('express-session')
 const passport = require('./middlewares/passportAuth')
 const cors = require('cors')
 const pg = require('pg')
 const db = require('./config/database')
-const SequelizeStore = require('connect-session-sequelize')(sessions.Store);
+const SequelizeStore = require('connect-session-sequelize')(sessions.Store)
+const io = module.exports.io = require('socket.io')(server)
+const socketManager = require('./socketManager')
 
 //session store 
 const mySessionStore = new SequelizeStore({
@@ -54,10 +54,11 @@ app.use(sessions({
     resave: false, //required
     saveUninitialized: false,
     store: mySessionStore,
-    proxy: true,
+    // proxy: true,
     cookie: {
-      secure: true,
-      httpOnly: true,
+      // secure: true,
+      httpOnly: false,
+      sameSite: false,
     }
 }))
 app.use(passport.initialize())
