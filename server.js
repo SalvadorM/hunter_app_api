@@ -54,11 +54,12 @@ app.use(sessions({
     resave: false, //required
     saveUninitialized: false,
     store: mySessionStore,
-    proxy: true,
+    // proxy: true,
     cookie: {
       // secure: true,
-      httpOnly: false,
-      sameSite: false,
+      // httpOnly: false,
+      // sameSite: false,
+      domain: '.herokuapp.com'
     }
 }))
 app.use(passport.initialize())
