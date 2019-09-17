@@ -26,8 +26,8 @@ pg.defaults.ssl = true
 //middlewares
 const whitelist = [
     'http://localhost:3000',
-    // 'https://classhub-hunter.herokuapp.com',
-    // 'http://classhub-hunter.herokuapp.com',
+    'https://classhub-hunter.herokuapp.com',
+    'http://classhub-hunter.herokuapp.com',
     // '192.168.1.4:3000'
   ];
 //middlewares
