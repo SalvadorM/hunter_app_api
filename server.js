@@ -42,7 +42,9 @@ app.use(
             callback(new Error('Not allowed by CORS'));
           }
         },
-        credentials: true
+        credentials: true,
+        allowedHeaders: ["Content-Type","Authorization","X-Requested-With","X-Forwarded-Proto", "Cookie","Set-Cookie"],
+        exposedHeaders: ["Content-Type","Authorization","X-Requested-With","X-Forwarded-Proto", "Cookie","Set-Cookie"],
       })
 )
 app.use(bodyParser.json())
@@ -54,13 +56,12 @@ app.use(sessions({
     resave: false, //required
     saveUninitialized: false,
     // store: mySessionStore,
-    // proxy: true,
-    // cookie: {
-    //   // secure: true,
-    //   // httpOnly: false,
-    //   // sameSite: false,
-    //   domain: 'classhub-hunter.herokuapp.com'
-    // }
+    cookie: {
+      // secure: false,
+      // httpOnly: false,
+      // sameSite: false,
+      domain: `.herokuapp.com`
+    }
 }))
 app.use(passport.initialize())
 app.use(passport.session())
