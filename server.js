@@ -56,12 +56,13 @@ app.use(sessions({
     resave: false, //required
     saveUninitialized: false,
     // store: mySessionStore,
-    // cookie: {
-    //   // secure: false,
-    //   // httpOnly: false,
-    //   // sameSite: false,
-    //   domain: `.herokuapp.com`
-    // }
+    cookie: {
+      maxAge: 5 * 24 * 60 * 60 * 1000, //user won't have to login for 5 days
+      // secure: false,
+      // httpOnly: false,
+      // sameSite: false,
+      // domain: `.herokuapp.com`
+    }
 }))
 app.use(passport.initialize())
 app.use(passport.session())
