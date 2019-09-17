@@ -158,7 +158,6 @@ const userController = {
             })
             .catch(err => res.status(400).send(err))
     },
-
     //@route    PUT user/:id
     //@params   id
     //@desc     update user in database
@@ -188,6 +187,7 @@ const userController = {
     //@route    POST user/login
     //@desc     POST request to log in user in sessions using passport 
     loginUser(req, res) {
+        req.session.save()
         console.log(`this is the ${req.headers.cookie}`)
         res.json({
             id: req.user.id,
