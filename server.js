@@ -59,7 +59,7 @@ app.use(sessions({
       // secure: true,
       // httpOnly: false,
       // sameSite: false,
-      domain: '.herokuapp.com'
+      domain: 'classhub-hunter.herokuapp.com'
     }
 }))
 app.use(passport.initialize())
