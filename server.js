@@ -12,12 +12,12 @@ const SequelizeStore = require('connect-session-sequelize')(sessions.Store)
 const io = module.exports.io = require('socket.io')(server)
 const socketManager = require('./socketManager')
 
-//session store 
-// const mySessionStore = new SequelizeStore({
-//   db: db.sequelize
-// })
+// session store 
+const mySessionStore = new SequelizeStore({
+  db: db.sequelize
+})
 
-// mySessionStore.sync()
+mySessionStore.sync()
 
 //heroku setting
 const PORT = process.env.PORT || 8000
@@ -55,7 +55,7 @@ app.use(sessions({
     secret: 'YOO YUUR',
     resave: false, //required
     saveUninitialized: false,
-    // store: mySessionStore,
+    store: mySessionStore,
     cookie: {
       maxAge: 5 * 24 * 60 * 60 * 1000, //user won't have to login for 5 days
       // secure: false,
