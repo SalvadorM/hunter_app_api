@@ -54,13 +54,13 @@ app.use(sessions({
     resave: false, //required
     saveUninitialized: false,
     store: mySessionStore,
-    proxy: true,
-    cookie: {
-      // secure: true,
-      // httpOnly: false,
-      // sameSite: false,
-      domain: 'classhub-hunter.herokuapp.com'
-    }
+    // proxy: true,
+    // cookie: {
+    //   // secure: true,
+    //   // httpOnly: false,
+    //   // sameSite: false,
+    //   domain: 'classhub-hunter.herokuapp.com'
+    // }
 }))
 app.use(passport.initialize())
 app.use(passport.session())
