@@ -188,6 +188,7 @@ const userController = {
     //@desc     POST request to log in user in sessions using passport 
     loginUser(req, res) {
         req.session.save()
+        console.log(`this is cookie ${req.headers.cookie}`)
         console.log(`this is the ${req.session.id}`)
         console.log(`this is other cookie ${req.sessionID}`)
         res.json({
