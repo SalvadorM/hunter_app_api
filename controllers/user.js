@@ -31,6 +31,7 @@ const userController = {
         
         return router
     },
+
     async testFunc(req, res){
         try{
 
@@ -187,13 +188,14 @@ const userController = {
     //@route    POST user/login
     //@desc     POST request to log in user in sessions using passport 
     loginUser(req, res) {
-        //return 
+        console.log(`this is the ${req.headers.cookie}`)
         res.json({
             id: req.user.id,
             firstName: req.user.firstName,
             lastName: req.user.lastName,
             email: req.user.email,
             username: req.user.username,
+            cookie: req.headers.cookie
             })
     },
     //@route    GET user/info

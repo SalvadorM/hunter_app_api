@@ -138,8 +138,6 @@ const ChatController = {
     //@desc     get userid chats 
     async getUserChats(req, res) {
         try{
-            console.log(req.headers)
-
             const userId = req.user.id
 
             const userFound = await User.findByPk(userId)

@@ -13,11 +13,11 @@ const io = module.exports.io = require('socket.io')(server)
 const socketManager = require('./socketManager')
 
 //session store 
-const mySessionStore = new SequelizeStore({
-  db: db.sequelize
-})
+// const mySessionStore = new SequelizeStore({
+//   db: db.sequelize
+// })
 
-mySessionStore.sync()
+// mySessionStore.sync()
 
 //heroku setting
 const PORT = process.env.PORT || 8000
@@ -26,9 +26,9 @@ pg.defaults.ssl = true
 //middlewares
 const whitelist = [
     'http://localhost:3000',
-    'https://classhub-hunter.herokuapp.com',
-    'http://classhub-hunter.herokuapp.com',
-    '192.168.1.4:3000'
+    // 'https://classhub-hunter.herokuapp.com',
+    // 'http://classhub-hunter.herokuapp.com',
+    // '192.168.1.4:3000'
   ];
 //middlewares
 app.set('trust proxy', 1)
@@ -53,7 +53,7 @@ app.use(sessions({
     secret: 'YOO YUUR',
     resave: false, //required
     saveUninitialized: false,
-    store: mySessionStore,
+    // store: mySessionStore,
     // proxy: true,
     // cookie: {
     //   // secure: true,
@@ -64,9 +64,6 @@ app.use(sessions({
 }))
 app.use(passport.initialize())
 app.use(passport.session())
-
-
-
 
 const controllers = require('./controllers')
 app.use(controllers)
